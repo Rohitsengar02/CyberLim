@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default to denying all access to prevent unauthorized reads/writes
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Allow public read access for site content collections.
+    // Write access is denied by default and handled by secure server actions.
+    match /navbar/{docId} {
+      allow read: if true;
+    }
+
+    match /heroCards/{cardId} {
+      allow read: if true;
+    }
+
+    match /siteConfig/{configId} {
+      allow read: if true;
+    }
+
+    match /heroContent/{docId} {
+      allow read: if true;
+    }
+
+    match /featuresContent/{docId} {
+      allow read: if true;
+    }
+    
+    match /featuresCards/{cardId} {
+      allow read: if true;
+    }
+
+    match /projectHead/{docId} {
+      allow read: if true;
+    }
+
+    match /projects/{projectId} {
+      allow read: if true;
+    }
+    
+    match /projectLayout/{docId} {
+      allow read: if true;
+    }
+  }
+}

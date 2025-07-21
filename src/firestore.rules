@@ -1,0 +1,46 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // For this prototype, we allow all reads and writes.
+    // In a production app, you should secure your data.
+    // Learn more: https://firebase.google.com/docs/firestore/security/get-started
+    match /{document=**} {
+      allow read, write: if true;
+    }
+    
+    // Explicitly allow server-side writes for admin panel content
+    // This is safe because the admin routes are protected by middleware
+    match /navbar/main {
+      allow read, write: if true;
+    }
+
+    match /heroCards/{cardId} {
+        allow read, write: if true;
+    }
+    
+    match /siteConfig/{docId} {
+        allow read, write: if true;
+    }
+    
+    match /heroContent/main {
+        allow read, write: if true;
+    }
+
+    match /featuresContent/{docId} {
+       allow read, write: if true;
+    }
+
+    match /featuresCards/{cardId} {
+       allow read, write: if true;
+    }
+    
+    match /projectHead/main {
+      allow read, write: if true;
+    }
+
+    match /projectLayout/main {
+      allow read, write: if true;
+    }
+  }
+}

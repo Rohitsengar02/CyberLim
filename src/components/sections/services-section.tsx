@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
@@ -39,6 +40,21 @@ const itemVariants = {
   },
 };
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.98 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.6,
+      ease: [0.25, 1, 0.5, 1],
+    },
+  }),
+};
+
+
 export const ServicesSection = React.forwardRef<HTMLElement, ServicesSectionProps>(({ headingConfig }, ref) => {
   const [cards, setCards] = useState<ServiceCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,9 +76,7 @@ export const ServicesSection = React.forwardRef<HTMLElement, ServicesSectionProp
     if (isLoading || isMobile || !sectionRef.current || !cardsContainerRef.current) return;
 
     const cardsWrapper = cardsContainerRef.current;
-    const cardsArray = gsap.utils.toArray<HTMLElement>('.service-card');
     
-    // Calculate the total width needed to scroll
     const scrollWidth = cardsWrapper.scrollWidth - window.innerWidth;
 
     const tl = gsap.to(cardsWrapper, {
@@ -78,8 +92,10 @@ export const ServicesSection = React.forwardRef<HTMLElement, ServicesSectionProp
     });
 
     return () => {
+      if (tl && tl.scrollTrigger) {
+        tl.scrollTrigger.kill();
+      }
       tl.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
     }
 
   }, { scope: sectionRef, dependencies: [isLoading, cards, isMobile] });
@@ -136,7 +152,7 @@ export const ServicesSection = React.forwardRef<HTMLElement, ServicesSectionProp
     <section 
       id="services" 
       ref={sectionRef} 
-      className="relative bg-background overflow-hidden py-16 md:py-0 md:min-h-screen md:flex md:flex-col"
+      className="relative bg-background overflow-hidden py-16 md:py-0 md:h-screen md:flex md:flex-col"
       style={{paddingTop: isMobile ? `${paddingTop}px` : undefined}}
     >
       <div className="absolute inset-0 z-0">
